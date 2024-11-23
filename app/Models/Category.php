@@ -9,5 +9,9 @@ class Category extends Model
 {
     use HasUuids;
 
-    protected $guarded = [];
+    protected $fillable = [
+        "name",
+        "description",
+        "company_id",
+    ];
 }

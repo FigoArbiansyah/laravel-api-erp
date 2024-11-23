@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\CategoryRepository;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryService
 {
@@ -18,6 +19,11 @@ class CategoryService
         return $this->categoryRepository->getAll();
     }
 
+    public function getAllCategoriesByCompany()
+    {
+        return $this->categoryRepository->getByCompany(request()->user()->company_id);
+    }
+
     public function getCategoryById($id)
     {
         return $this->categoryRepository->findById($id);
@@ -26,7 +32,7 @@ class CategoryService
     public function createCategory(array $data)
     {
         // Contoh logika bisnis: memvalidasi nama unik
-        if ($this->categoryRepository->getAll()->where('name', $data['name'])->isNotEmpty()) {
+        if ($this->categoryRepository->getByCompany(request()->user()->company_id)->where('name', $data['name'])->isNotEmpty()) {
             throw new \Exception('Category name already exists.');
         }
 

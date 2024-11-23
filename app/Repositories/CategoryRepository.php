@@ -11,6 +11,13 @@ class CategoryRepository
         return Category::orderBy('created_at', 'desc')->get();
     }
 
+    public function getByCompany($companyId)
+    {
+        return Category::orderBy('created_at', 'desc')
+            ->where('company_id', $companyId)
+            ->get();
+    }
+
     public function findById($id)
     {
         return Category::find($id);
@@ -24,7 +31,7 @@ class CategoryRepository
     public function update($id, array $data)
     {
         $category = $this->findById($id);
-        if ($category) {
+        if ($category && $category->company_id === request()->user()->company_id) {
             $category->update($data);
             return $category;
         }
@@ -34,7 +41,7 @@ class CategoryRepository
     public function delete($id)
     {
         $category = $this->findById($id);
-        if ($category) {
+        if ($category && $category->company_id === request()->user()->company_id) {
             $category->delete();
             return true;
         }

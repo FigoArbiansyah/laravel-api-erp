@@ -15,7 +15,13 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->text('description')->nullable();
+
+            $table->unsignedBigInteger('company_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('company_id')->references('id')->on('companies')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

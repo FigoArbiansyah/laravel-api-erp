@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -19,7 +21,10 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = $this->categoryService->getAllCategories();
+        $categories = $this->categoryService->getAllCategoriesByCompany();
+        // if (Auth::user()->role_id == Role::ADMIN) {
+        //     $categories = $this->categoryService->getAllCategories();
+        // }
         return response()->json([
             'data' => $categories,
         ], Response::HTTP_OK);
@@ -44,6 +49,8 @@ class CategoryController extends Controller
                 'name' => 'required|string|max:255',
                 'description' => 'nullable|string',
             ]);
+
+            $validated['company_id'] = request()->user()->company_id;
 
             $category = $this->categoryService->createCategory($validated);
             DB::commit();

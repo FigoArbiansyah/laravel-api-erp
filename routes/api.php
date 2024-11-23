@@ -11,9 +11,10 @@ Route::get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function($router) {
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+    Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
-    Route::middleware('is-login')->prefix('categories')->group(function($router) {
+    Route::middleware('auth:sanctum')->prefix('categories')->group(function($router) {
         $router->get('/', [CategoryController::class, 'index']); // Mendapatkan semua kategori
         $router->get('/{id}', [CategoryController::class, 'show']); // Mendapatkan kategori berdasarkan ID
         $router->post('/', [CategoryController::class, 'store']); // Menambahkan kategori baru
