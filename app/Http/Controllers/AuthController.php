@@ -109,6 +109,16 @@ class AuthController extends Controller
         }
     }
 
+    public function me()
+    {
+        $reqUser = request()->user();
+        $user = User::with('company', 'role')->find($reqUser->id);
+
+        return response()->json([
+            'data' => $user,
+        ]);
+    }
+
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();

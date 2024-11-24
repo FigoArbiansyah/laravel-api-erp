@@ -14,6 +14,8 @@ Route::prefix('v1')->group(function($router) {
     Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
+    Route::get('me', [AuthController::class, 'me'])->middleware('auth:sanctum');
+
     Route::middleware('auth:sanctum')->prefix('categories')->group(function($router) {
         $router->get('/', [CategoryController::class, 'index']); // Mendapatkan semua kategori
         $router->get('/{id}', [CategoryController::class, 'show']); // Mendapatkan kategori berdasarkan ID
